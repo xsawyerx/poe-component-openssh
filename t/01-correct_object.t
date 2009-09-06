@@ -35,6 +35,8 @@ event 'hello' => sub {
 };
 
 event 'check_event' => sub {
+    # TODO: this should actually check if the password is okay
+    # but it's hard to check that
     my ( $self, $kernel ) = @_[ OBJECT, KERNEL ];
 
     if ( ! $self->reached ) {
