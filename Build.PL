@@ -26,7 +26,6 @@ my $builder = Module::Build->new(
         resources => {
             repository =>
                 'http://github.com/xsawyerx/poe-component-openssh/tree/master',
-            },
         },
         keywords  => [ 'poe', 'ssh', 'openssh', 'component', 'poco' ],
     },
