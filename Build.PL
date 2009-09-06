@@ -9,8 +9,9 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/POE/Component/OpenSSH.pm',
     build_requires => {
         'Test::More'         => 0,
-        'Term::ReadPassword' => 0,
         'MooseX::POE'        => 0,
+        'Term::ReadKey'      => 0,
+        'Term::ReadPassword' => 0,
     },
     requires => {
         'POE'                     => 1.006,
