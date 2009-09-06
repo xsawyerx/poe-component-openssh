@@ -15,36 +15,51 @@ has 'ssh' => (
     lazy_build => 1,
 );
 
-has 'args' => ( is => 'ro', isa => 'ArrayRef' );
-
+has 'args'    => ( is => 'ro', isa => 'ArrayRef' );
+has 'reached' => ( is => 'rw', isa => 'Bool', default => 0 );
 sub _build_ssh {
     my $self = $_[OBJECT];
-    return POE::Component::OpenSSH->new(
-        args  => $self->args,
-        debug => 1,
-    );
+    return POE::Component::OpenSSH->new( args  => $self->args );
 }
 
 sub START {
-    my $self = $_[OBJECT];
+    my ( $self, $kernel ) = @_[ OBJECT, KERNEL ];
 
-    $self->ssh->obj->capture( { event => 'hello' }, 'w' );
+    $self->ssh->obj->capture( { event => 'hello' }, '/bin/true' );
+    $kernel->alarm( 'check_event', time() + 5 );
 }
 
 event 'hello' => sub {
-    ok( 1, 'got it' );
+    ok( 1, 'Reached event' );
+    $_[OBJECT]->reached(1);
+};
+
+event 'check_event' => sub {
+    my ( $self, $kernel ) = @_[ OBJECT, KERNEL ];
+
+    if ( ! $self->reached ) {
+        skip 'Timing out. Probably wrong password.' => 1;
+        $kernel->stop();
+    }
 };
 
 package main;
 
-use Term::ReadPassword;
-use POE::Kernel;
 use English '-no_match_vars';
+use Test::More;
+use POE::Kernel;
+use Term::ReadPassword;
 
-my $user = getpwuid $EFFECTIVE_USER_ID;
-my $pass = read_password("Local SSH Pass for $user: ");
+SKIP: {
+    my $user = getpwuid $EFFECTIVE_USER_ID;
+    my $pass = read_password("Local SSH Pass for $user: ");
 
-test->new( args => [ 'localhost', user => $user, passwd => $pass ] );
+    $user || skip 'Got no username' => 1;
+    $pass || skip 'Got no pass'     => 1;
 
-POE::Kernel->run();
+    test->new( args => [ 'localhost', user => $user, passwd => $pass ] );
+
+    POE::Kernel->run();
+}
+
 
