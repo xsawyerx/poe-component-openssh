@@ -33,7 +33,7 @@ sub _build_obj {
         verbose        => $self->verbose,
     );
 
-    $self->obj($obj);
+    return $obj;
 }
 
 1;
