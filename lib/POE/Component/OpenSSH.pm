@@ -11,7 +11,7 @@ use POE::Component::Generic;
 
 has 'args'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
 has 'options' => ( is => 'ro', isa => 'HashRef',  default => sub { {} } );
-has 'alias'   => ( is => 'ro', isa => 'Str',      default => ''         );
+has 'alias'   => ( is => 'ro', isa => 'Str',      default => q{}        );
 has 'debug'   => ( is => 'ro', isa => 'Bool',     default => 0          );
 has 'verbose' => ( is => 'ro', isa => 'Bool',     default => 0          );
 
