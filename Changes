@@ -1,7 +1,7 @@
 Revision history for POE-Component-OpenSSH
 (in the form of DD/MM/YY)
 
-0.02    06.09.09
+0.02    07.09.09
         * Adding support for debug, verbose and alias
         * Fixed test to include timeout skip
         * Added a lot to POD
