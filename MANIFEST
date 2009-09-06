@@ -2,7 +2,12 @@ Build.PL
 Changes
 MANIFEST
 README
-lib/POE/Component/SSH.pm
+lib/POE/Component/OpenSSH.pm
 t/00-load.t
+t/01-correct_object.t
+t/boilerplate.t
 t/pod-coverage.t
 t/pod.t
+Makefile.PL
+LICENSE
+META.yml
