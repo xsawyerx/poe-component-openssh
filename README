@@ -3,7 +3,7 @@ NAME
     Net::OpenSSH
 
 VERSION
-    Version 0.01
+    Version 0.02
 
 SYNOPSIS
     Need nonblocking SSH? You like Net::OpenSSH? Try out this stuff right
@@ -15,14 +15,56 @@ SYNOPSIS
 
         # perhaps using verbose, debug?
         my $ssh = POE::Component::OpenSSH->new(
-            args    => [ $host, user => 'root', passwd => $pass ],
+            args    => [ ''root@host', passwd => $pass ],
             verbose => 1, # turns on POE::Component::Generic verbose
             debug   => 1, # turns on POE::Component::Generic debug
         );
-
-        # now set up events
-        $ssh->
         ...
+
+    Here is an example using MooseX::POE. If you know POE::Session, you can
+    use that too:
+
+        package Runner;
+
+        use MooseX::POE;
+
+        has 'host' => ( is => 'ro', isa => 'Str', default => 'localhost' );
+        has 'user' => ( is => 'ro', isa => 'Str', default => 'root'      );
+        has 'pass' => ( is => 'ro', isa => 'Str', default => 'psss'      );
+        has 'cmd'  => ( is => 'ro', isa => 'Str', default => 'w'         );
+
+        sub START {
+            my $self = $_[OBJECT];
+            my $ssh  = POE::Component::OpenSSH->new(
+                args => [
+                    $self->host,
+                    user   => $self->user,
+                    passwd => $self->passwd,
+                ],
+            );
+
+            # remember, $ssh is just POE::Component::OpenSSH
+            # you want the Net::OpenSSH object (or psuedo-object)
+            $ssh->obj->capture( { event => 'parse_cmd' }, $cmd );
+        }
+
+        event 'parse_cmd' => sub {
+            my ( $self, $output ) @_[ OBJECT, ARG1 ];
+            my $host = $self->host;
+            print "[$host]: $output";
+        };
+
+        package main;
+
+        my @machines = ( qw( server1 server2 server3 ) );
+
+        foreach my $machine (@machines) {
+            Runner->new(
+                host => $machine,
+                pass => 'my_super_pass',
+                cmd  => 'uname -a',
+            );
+        }
 
 DESCRIPTION
     This module allows you to use SSH (via Net::OpenSSH) in a nonblocking
@@ -31,10 +73,10 @@ DESCRIPTION
     I kept having to write this small thing each time I needed nonblocking
     SSH in a project. I got tired of it so I wrote this instead.
 
-    Why put the args in an "args" attribute instead of straight away
-    attributes? Because Net::OpenSSH has a lot of options and they may
-    collide with POE::Component::Generic's options, and I don't feel like
-    maintaining the mess.
+    You might ask 'why put the args in an "args" attribute instead of
+    straight away attributes?' Because Net::OpenSSH has a lot of options and
+    they may collide with POE::Component::Generic's options and I don't feel
+    like maintaining the mess.
 
     It's on Github so you can patch it up if you want (I accept patches...
     and foodstamps).
@@ -83,7 +125,20 @@ SUPPORT
 
         <http://search.cpan.org/dist/POE-Component-OpenSSH/>
 
+SEE ALSO
+    If you have no idea what I'm doing (but you generally know what POE is),
+    check these stuff:
+
+    POE::Component::Generic
+
+    Net::OpenSSH
+
+    If you don't know POE at all, check POE.
+
 DEPENDENCIES
+    These are the actual dependencies, though I don't use Moose or POE
+    directly but rather MooseX::POE.
+
     Net::OpenSSH
 
     POE
@@ -95,7 +150,8 @@ DEPENDENCIES
     MooseX::POE
 
 ACKNOWLEDGEMENTS
-    All the people involved in the aforementioned projects.
+    All the people involved in the aforementioned projects and the Perl
+    community.
 
 COPYRIGHT & LICENSE
     Copyright 2009 Sawyer X, all rights reserved.

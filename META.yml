@@ -1,6 +1,6 @@
 ---
 name: POE-Component-OpenSSH
-version: 0.01
+version: 0.02
 author:
   - 'Sawyer X <xsawyerx@cpan.org>'
 abstract: Nonblocking SSH Component for POE using Net::OpenSSH
@@ -10,6 +10,7 @@ resources:
   repository: http://github.com/xsawyerx/poe-component-openssh/tree/master
 build_requires:
   MooseX::POE: 0
+  Term::ReadKey: 0
   Term::ReadPassword: 0
   Test::More: 0
 requires:
@@ -23,7 +24,7 @@ configure_requires:
 provides:
   POE::Component::OpenSSH:
     file: lib/POE/Component/OpenSSH.pm
-    version: 0.01
+    version: 0.02
 generated_by: Module::Build version 0.35
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
