@@ -50,11 +50,24 @@ package main;
 use English '-no_match_vars';
 use Test::More;
 use POE::Kernel;
+use Term::ReadKey;
 use Term::ReadPassword;
 
 SKIP: {
-    my $user = getpwuid $EFFECTIVE_USER_ID;
-    my $pass = read_password("Local SSH Pass for $user: ");
+    my ( $user, $pass );
+    eval {
+        local $SIG{'ALRM'} = sub { die "timeout\n"; };
+        alarm 10;
+        $user = getpwuid $EFFECTIVE_USER_ID;
+        $pass = read_password("Local SSH Pass for $user: ");
+        #ReadMode 0;
+        alarm 0;
+    };
+
+    if ( $@ =~ /timeout/ ) {
+        ReadMode 'normal';
+        skip 'Youz a Wuss!' => 1;
+    }
 
     $user || skip 'Got no username' => 1;
     $pass || skip 'Got no pass'     => 1;
