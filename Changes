@@ -5,6 +5,7 @@ Revision history for POE-Component-OpenSSH
         * Adding support for debug, verbose and alias
         * Fixed test to include timeout skip
         * Added a lot to POD
+        * Was building obj incorrectly (thanks Perl::Critic)
 
 0.01    03.09.09
         Hope this works
