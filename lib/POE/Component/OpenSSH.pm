@@ -132,6 +132,8 @@ L<POE::Component::Generic>
 
 L<Moose>
 
+L<MooseX::POE>
+
 =head1 ACKNOWLEDGEMENTS
 
 All the people involved in the aforementioned projects.
