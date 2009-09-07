@@ -7,6 +7,7 @@ our $VERSION = '0.04';
 
 use Moose;
 use Net::OpenSSH;
+use MooseX::Aliases;
 use POE::Component::Generic;
 
 has 'args'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
@@ -19,6 +20,7 @@ has 'verbose' => ( is => 'ro', isa => 'Bool',     default => 0          );
 has 'obj' => (
     is         => 'rw',
     isa        => 'POE::Component::Generic',
+    alias      => 'object',
     lazy_build => 1,
 );
 
@@ -99,6 +101,9 @@ Here is an example using L<MooseX::POE>:
         # remember, $ssh is just POE::Component::OpenSSH
         # you want the Net::OpenSSH object (or psuedo-object)
         $ssh->obj->capture( { event => 'parse_cmd' }, $cmd );
+
+        # this is the same:
+        $ssh->object->capture( { event => 'parse_cmd' }, $cmd );
     }
 
     event 'parse_cmd' => sub {
@@ -148,6 +153,10 @@ This method access the actual Net::OpenSSH object. It is wrapped with L<POE::Com
 For example:
 
     $ssh->obj->capture( { event => 'handle_capture' }, 'echo yo yo' );
+
+=head2 object
+
+An alias for I<obj>.
 
 =head2 args
 

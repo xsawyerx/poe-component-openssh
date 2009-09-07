@@ -3,6 +3,7 @@ Revision history for POE-Component-OpenSSH
 
 0.04    07.09.09
         * Adding 'error' attribute
+        * Adding alias 'object' for 'obj'
 
 0.03    07.09.09
         * A lot of POD work: examples, METHODS documentation, etc.
