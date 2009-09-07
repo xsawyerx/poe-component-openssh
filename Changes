@@ -1,6 +1,10 @@
 Revision history for POE-Component-OpenSSH
 (in the form of DD/MM/YY)
 
+0.03    07.09.09
+        * A lot of POD work: examples, METHODS documentation, etc.
+        * I accidently written I use MooseX::POE for it. I don't.
+
 0.02    07.09.09
         * Adding support for debug, verbose and alias
         * Fixed test to include timeout skip
