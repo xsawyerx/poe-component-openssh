@@ -55,16 +55,25 @@ Need nonblocking SSH? You like Net::OpenSSH? Try out this stuff right here.
     use POE::Component::OpenSSH;
 
     my $ssh = POE::Component::OpenSSH->new( args => [ $host, user => $user ] );
+    $ssh->obj->system( { event => 'read_system_output' }, 'w' );
 
-    # perhaps using verbose, debug?
+Perhaps you want it with debugging and verbose of POE::Component::Generic
+
     my $ssh = POE::Component::OpenSSH->new(
-        args    => [ ''root@host', passwd => $pass ],
+        args    => [ 'root@host', passwd => $pass ],
         verbose => 1, # turns on POE::Component::Generic verbose
         debug   => 1, # turns on POE::Component::Generic debug
     );
-    ...
 
-Here is an example using L<MooseX::POE>. If you know POE::Session, you can use that too:
+What about setting timeout for Net::OpenSSH?
+
+    my $ssh = POE::Component::OpenSSH->new(
+        args => [ 'root@host', passwd => $pass, timeout => 10 ],
+    );
+
+Here is an example using L<MooseX::POE>:
+
+(If you know <POE::Session>, you can use that too)
 
     package Runner;
 
@@ -98,6 +107,8 @@ Here is an example using L<MooseX::POE>. If you know POE::Session, you can use t
 
     package main;
 
+    use POE::Kernel;
+
     my @machines = ( qw( server1 server2 server3 ) );
 
     foreach my $machine (@machines) {
@@ -108,6 +119,8 @@ Here is an example using L<MooseX::POE>. If you know POE::Session, you can use t
         );
     }
 
+    POE::Kernel->run();
+
 =head1 DESCRIPTION
 
 This module allows you to use SSH (via L<Net::OpenSSH>) in a nonblocking manner.
@@ -117,6 +130,43 @@ I kept having to write this small thing each time I needed nonblocking SSH in a 
 You might ask 'why put the args in an "args" attribute instead of straight away attributes?' Because Net::OpenSSH has a lot of options and they may collide with POE::Component::Generic's options and I don't feel like maintaining the mess.
 
 It's on Github so you can patch it up if you want (I accept patches... and foodstamps).
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new POE::Component::OpenSSH object. If you want to access the Net::OpenSSH check I<obj> below.
+
+You should note this object is simply a component, you're still required to put it in a L<POE::Session>. The examples use L<MooseX::POE> which does the same thing.
+
+=head2 obj
+
+This method access the actual Net::OpenSSH object. It is wrapped with L<POE::Component::Generic>, so the first argument is actually a hashref that POE::Component::Generic requires. Specifically, noting which event will handle the return of the Net::OpenSSH method.
+
+For example:
+
+    $ssh->obj->capture( { event => 'handle_capture' }, 'echo yo yo' );
+
+=head2 args
+
+These are the arguments that will go to L<Net::OpenSSH> creation. This is an arrayref.
+
+For example:
+
+    # using user@host
+    my $ssh = POE::Component::OpenSSH->new( args => [ 'root@remote_host' ] );
+
+    # using separate arguments
+    my $ssh = POE::Component::OpenSSH->new( args => [ 'remote_host, user => 'root' ] );
+
+    # same thing, just with pass, and writing it nicer
+    my $ssh = POE::Component::OpenSSH->new(
+        args => [
+            'remote_host',
+            user   => 'root',
+            passwd => $pass,
+        ],
+    );
 
 =head1 AUTHOR
 
@@ -178,8 +228,6 @@ If you don't know POE at all, check L<POE>.
 
 =head1 DEPENDENCIES
 
-These are the actual dependencies, though I don't use Moose or POE directly but rather MooseX::POE.
-
 L<Net::OpenSSH>
 
 L<POE>
@@ -187,9 +235,6 @@ L<POE>
 L<POE::Component::Generic>
 
 L<Moose>
-
-L<MooseX::POE>
-
 
 =head1 ACKNOWLEDGEMENTS
 
