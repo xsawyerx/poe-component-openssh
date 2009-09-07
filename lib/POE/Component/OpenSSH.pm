@@ -3,7 +3,7 @@ package POE::Component::OpenSSH;
 use strict;
 use warnings;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 use Moose;
 use Net::OpenSSH;
@@ -11,6 +11,7 @@ use POE::Component::Generic;
 
 has 'args'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
 has 'options' => ( is => 'ro', isa => 'HashRef',  default => sub { {} } );
+has 'error'   => ( is => 'ro', isa => 'HashRef',  default => sub { {} } );
 has 'alias'   => ( is => 'ro', isa => 'Str',      default => q{}        );
 has 'debug'   => ( is => 'ro', isa => 'Bool',     default => 0          );
 has 'verbose' => ( is => 'ro', isa => 'Bool',     default => 0          );
@@ -31,6 +32,7 @@ sub _build_obj {
         object_options => $self->args,
         debug          => $self->debug,
         verbose        => $self->verbose,
+        error          => $self->error,
     );
 
     return $obj;
@@ -46,7 +48,7 @@ POE::Component::OpenSSH - Nonblocking SSH Component for POE using Net::OpenSSH
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =head1 SYNOPSIS
 
