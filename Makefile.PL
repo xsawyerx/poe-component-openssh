@@ -6,13 +6,13 @@ WriteMakefile
           'VERSION_FROM' => 'lib/POE/Component/OpenSSH.pm',
           'PREREQ_PM' => {
                            'Moose' => '0.86',
-                           'MooseX::POE' => 0,
+                           'MooseX::POE' => '0',
                            'Net::OpenSSH' => '0.36',
                            'POE' => '1.006',
                            'POE::Component::Generic' => '0.1201',
-                           'Term::ReadKey' => 0,
-                           'Term::ReadPassword' => 0,
-                           'Test::More' => 0
+                           'Term::ReadKey' => '0',
+                           'Term::ReadPassword' => '0',
+                           'Test::More' => '0'
                          },
           'INSTALLDIRS' => 'site',
           'EXE_FILES' => [],
