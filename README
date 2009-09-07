@@ -3,7 +3,7 @@ NAME
     Net::OpenSSH
 
 VERSION
-    Version 0.03
+    Version 0.04
 
 SYNOPSIS
     Need nonblocking SSH? You like Net::OpenSSH? Try out this stuff right
