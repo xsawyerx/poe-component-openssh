@@ -17,6 +17,7 @@ my $builder = Module::Build->new(
         'POE'                     => 1.006,
         'Moose'                   => 0.86,
         'Net::OpenSSH'            => 0.36,
+        'MooseX::Aliases'         => 0.02,
         'POE::Component::Generic' => 0.1201,
     },
     add_to_cleanup     => [ 'POE-Component-OpenSSH-*' ],
