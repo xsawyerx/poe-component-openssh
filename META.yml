@@ -15,6 +15,7 @@ build_requires:
   Test::More: 0
 requires:
   Moose: 0.86
+  MooseX::Aliases: 0.02
   Net::OpenSSH: 0.36
   POE: 1.006
   POE::Component::Generic: 0.1201

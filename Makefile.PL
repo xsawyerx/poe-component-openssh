@@ -6,6 +6,7 @@ WriteMakefile
           'VERSION_FROM' => 'lib/POE/Component/OpenSSH.pm',
           'PREREQ_PM' => {
                            'Moose' => '0.86',
+                           'MooseX::Aliases' => '0.02',
                            'MooseX::POE' => '0',
                            'Net::OpenSSH' => '0.36',
                            'POE' => '1.006',

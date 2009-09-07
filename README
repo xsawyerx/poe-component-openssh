@@ -55,6 +55,9 @@ SYNOPSIS
             # remember, $ssh is just POE::Component::OpenSSH
             # you want the Net::OpenSSH object (or psuedo-object)
             $ssh->obj->capture( { event => 'parse_cmd' }, $cmd );
+
+            # this is the same:
+            $ssh->object->capture( { event => 'parse_cmd' }, $cmd );
         }
 
         event 'parse_cmd' => sub {
@@ -112,6 +115,9 @@ METHODS
     For example:
 
         $ssh->obj->capture( { event => 'handle_capture' }, 'echo yo yo' );
+
+  object
+    An alias for *obj*.
 
   args
     These are the arguments that will go to Net::OpenSSH creation. This is
