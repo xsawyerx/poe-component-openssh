@@ -75,9 +75,19 @@ What about setting timeout for Net::OpenSSH?
         args => [ 'root@host', passwd => $pass, timeout => 10 ],
     );
 
-Here is an example using L<MooseX::POE>:
+=head1 DESCRIPTION
 
-(If you know <POE::Session>, you can use that too)
+This module allows you to use SSH (via L<Net::OpenSSH>) in a nonblocking manner.
+
+I kept having to write this small thing each time I needed nonblocking SSH in a project. I got tired of it so I wrote this instead.
+
+You might ask 'why put the args in an "args" attribute instead of straight away attributes?' Because Net::OpenSSH has a lot of options and they may collide with POE::Component::Generic's options and I don't feel like maintaining the mess.
+
+It's on Github so you can patch it up if you want (I accept patches... and foodstamps).
+
+Here is a more elaborate example using L<MooseX::POE>:
+
+(If you know L<POE::Session>, you can use that too)
 
     package Runner;
 
@@ -127,16 +137,6 @@ Here is an example using L<MooseX::POE>:
     }
 
     POE::Kernel->run();
-
-=head1 DESCRIPTION
-
-This module allows you to use SSH (via L<Net::OpenSSH>) in a nonblocking manner.
-
-I kept having to write this small thing each time I needed nonblocking SSH in a project. I got tired of it so I wrote this instead.
-
-You might ask 'why put the args in an "args" attribute instead of straight away attributes?' Because Net::OpenSSH has a lot of options and they may collide with POE::Component::Generic's options and I don't feel like maintaining the mess.
-
-It's on Github so you can patch it up if you want (I accept patches... and foodstamps).
 
 =head1 METHODS
 
