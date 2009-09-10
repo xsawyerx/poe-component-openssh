@@ -3,7 +3,7 @@ package POE::Component::OpenSSH;
 use strict;
 use warnings;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use Moose;
 use Net::OpenSSH;
@@ -50,7 +50,7 @@ POE::Component::OpenSSH - Nonblocking SSH Component for POE using Net::OpenSSH
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =head1 SYNOPSIS
 
@@ -146,6 +146,34 @@ Creates a new POE::Component::OpenSSH object. If you want to access the Net::Ope
 
 You should note this object is simply a component, you're still required to put it in a L<POE::Session>. The examples use L<MooseX::POE> which does the same thing.
 
+=over 4
+
+=item args
+
+The arguments that will go to L<Net::OpenSSH>.
+
+=item options
+
+The options that will go to L<POE::Component::Generic>'s I<options> argument, stuff like C< { trace => 1 } >.
+
+=item error
+
+Event when L<POE::Component::Generic> has an error. Either a hashref with I<session> and I<event> or a string with the event in the current session.
+
+=item alias
+
+A session alias to register with the kernel. Default is none.
+
+=item debug
+
+Shows component debugging information.
+
+=item verbose
+
+Some stuff about what is happening to L<Net::OpenSSH>. Very useful for debugging the L<Net::OpenSSH> object.
+
+=back
+
 =head2 obj
 
 This method access the actual Net::OpenSSH object. It is wrapped with L<POE::Component::Generic>, so the first argument is actually a hashref that POE::Component::Generic requires. Specifically, noting which event will handle the return of the Net::OpenSSH method.
@@ -184,6 +212,8 @@ For example:
 Sawyer X, C<< <xsawyerx at cpan.org> >>
 
 =head1 BUGS
+
+There is one known issue I've personally stumbled across which I've yet to figure out and resolve. Using L<MooseX::POE>, running C<capture>s from the C<START> event works, but running from another event doesn't. The connection fails and hangs. In order to fix it, I use a clearance on the attribute before running the second C<capture>.
 
 Please report any bugs or feature requests to C<bug-poe-component-openssh at rt.cpan.org>, or through
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=POE-Component-OpenSSH>.  I will be notified, and then you'll
