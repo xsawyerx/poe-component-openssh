@@ -3,7 +3,7 @@ NAME
     Net::OpenSSH
 
 VERSION
-    Version 0.04
+    Version 0.05
 
 SYNOPSIS
     Need nonblocking SSH? You like Net::OpenSSH? Try out this stuff right
@@ -29,9 +29,24 @@ SYNOPSIS
             args => [ 'root@host', passwd => $pass, timeout => 10 ],
         );
 
-    Here is an example using MooseX::POE:
+DESCRIPTION
+    This module allows you to use SSH (via Net::OpenSSH) in a nonblocking
+    manner.
 
-    (If you know <POE::Session>, you can use that too)
+    I kept having to write this small thing each time I needed nonblocking
+    SSH in a project. I got tired of it so I wrote this instead.
+
+    You might ask 'why put the args in an "args" attribute instead of
+    straight away attributes?' Because Net::OpenSSH has a lot of options and
+    they may collide with POE::Component::Generic's options and I don't feel
+    like maintaining the mess.
+
+    It's on Github so you can patch it up if you want (I accept patches...
+    and foodstamps).
+
+    Here is a more elaborate example using MooseX::POE:
+
+    (If you know POE::Session, you can use that too)
 
         package Runner;
 
@@ -82,21 +97,6 @@ SYNOPSIS
 
         POE::Kernel->run();
 
-DESCRIPTION
-    This module allows you to use SSH (via Net::OpenSSH) in a nonblocking
-    manner.
-
-    I kept having to write this small thing each time I needed nonblocking
-    SSH in a project. I got tired of it so I wrote this instead.
-
-    You might ask 'why put the args in an "args" attribute instead of
-    straight away attributes?' Because Net::OpenSSH has a lot of options and
-    they may collide with POE::Component::Generic's options and I don't feel
-    like maintaining the mess.
-
-    It's on Github so you can patch it up if you want (I accept patches...
-    and foodstamps).
-
 METHODS
   new
     Creates a new POE::Component::OpenSSH object. If you want to access the
@@ -105,6 +105,28 @@ METHODS
     You should note this object is simply a component, you're still required
     to put it in a POE::Session. The examples use MooseX::POE which does the
     same thing.
+
+    args
+        The arguments that will go to Net::OpenSSH.
+
+    options
+        The options that will go to POE::Component::Generic's *options*
+        argument, stuff like " { trace =" 1 } >.
+
+    error
+        Event when POE::Component::Generic has an error. Either a hashref
+        with *session* and *event* or a string with the event in the current
+        session.
+
+    alias
+        A session alias to register with the kernel. Default is none.
+
+    debug
+        Shows component debugging information.
+
+    verbose
+        Some stuff about what is happening to Net::OpenSSH. Very useful for
+        debugging the Net::OpenSSH object.
 
   obj
     This method access the actual Net::OpenSSH object. It is wrapped with
@@ -144,6 +166,12 @@ AUTHOR
     Sawyer X, "<xsawyerx at cpan.org>"
 
 BUGS
+    There is one known issue I've personally stumbled across which I've yet
+    to figure out and resolve. Using MooseX::POE, running "capture"s from
+    the "START" event works, but running from another event doesn't. The
+    connection fails and hangs. In order to fix it, I use a clearance on the
+    attribute before running the second "capture".
+
     Please report any bugs or feature requests to "bug-poe-component-openssh
     at rt.cpan.org", or through the web interface at
     <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=POE-Component-OpenSSH>.
