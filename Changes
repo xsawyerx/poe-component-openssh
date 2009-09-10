@@ -1,8 +1,9 @@
 Revision history for POE-Component-OpenSSH
 (in the form of DD/MM/YY)
 
-0.05    (hm..)
+0.05    10.09.09
         * Require MooseX::Aliases 0.03 to include important fixes
+        * Some POD changes: explaining things better, hopefully
 
 0.04    07.09.09
         * Adding 'error' attribute
