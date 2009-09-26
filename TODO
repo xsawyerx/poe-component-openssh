@@ -1,5 +1,4 @@
 Stuff to do:
-- make_immutable
 - use MooseX::Aliases 0.05 and fix ordering
 - improve initial test
 - add more tests
