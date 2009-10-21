@@ -34,7 +34,7 @@ sub _build_ssh {
 sub START {
     my ( $self, $kernel ) = @_[ OBJECT, KERNEL ];
 
-    $self->ssh->obj->capture( { event => 'hello' }, '/bin/true' );
+    $self->ssh->capture( { event => 'hello' }, '/bin/true' );
     $kernel->alarm( 'check_event', time() + 5 );
 }
 

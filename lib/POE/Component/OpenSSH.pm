@@ -21,6 +21,7 @@ has 'obj' => (
     is         => 'rw',
     isa        => 'POE::Component::Generic',
     alias      => 'object',
+    handles    => [ qw( capture capture2 system scp_get scp_put sftp ) ],
     lazy_build => 1,
 );
 
