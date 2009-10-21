@@ -3,7 +3,7 @@ NAME
     Net::OpenSSH
 
 VERSION
-    Version 0.05
+    Version 0.06
 
 SYNOPSIS
     Need nonblocking SSH? You like Net::OpenSSH? Try out this stuff right
@@ -12,7 +12,7 @@ SYNOPSIS
         use POE::Component::OpenSSH;
 
         my $ssh = POE::Component::OpenSSH->new( args => [ $host, user => $user ] );
-        $ssh->obj->system( { event => 'read_system_output' }, 'w' );
+        $ssh->system( { event => 'read_system_output' }, 'w' );
 
     Perhaps you want it with debugging and verbose of
     POE::Component::Generic
@@ -33,6 +33,10 @@ DESCRIPTION
     This module allows you to use SSH (via Net::OpenSSH) in a nonblocking
     manner.
 
+    The only differences is that in the *new()* method, you need to indicate
+    OpenSSH args in *args*, and the first arg to a method should be a
+    hashref that includes an *event* to reach with the result.
+
     I kept having to write this small thing each time I needed nonblocking
     SSH in a project. I got tired of it so I wrote this instead.
 
@@ -49,12 +53,11 @@ DESCRIPTION
     (If you know POE::Session, you can use that too)
 
         package Runner;
-
         use MooseX::POE;
 
         has 'host' => ( is => 'ro', isa => 'Str', default => 'localhost' );
         has 'user' => ( is => 'ro', isa => 'Str', default => 'root'      );
-        has 'pass' => ( is => 'ro', isa => 'Str', default => 'psss'      );
+        has 'pass' => ( is => 'ro', isa => 'Str', default => 'pass'      );
         has 'cmd'  => ( is => 'ro', isa => 'Str', default => 'w'         );
 
         sub START {
@@ -67,12 +70,7 @@ DESCRIPTION
                 ],
             );
 
-            # remember, $ssh is just POE::Component::OpenSSH
-            # you want the Net::OpenSSH object (or psuedo-object)
-            $ssh->obj->capture( { event => 'parse_cmd' }, $cmd );
-
-            # this is the same:
-            $ssh->object->capture( { event => 'parse_cmd' }, $cmd );
+            $ssh->capture( { event => 'parse_cmd' }, $cmd );
         }
 
         event 'parse_cmd' => sub {
@@ -102,9 +100,9 @@ METHODS
     Creates a new POE::Component::OpenSSH object. If you want to access the
     Net::OpenSSH check *obj* below.
 
-    You should note this object is simply a component, you're still required
-    to put it in a POE::Session. The examples use MooseX::POE which does the
-    same thing.
+    This module (still?) doesn't have a *spawn* method, so you're still
+    required to put it in a POE::Session. The examples use MooseX::POE which
+    does the same thing.
 
     args
         The arguments that will go to Net::OpenSSH.
@@ -134,9 +132,18 @@ METHODS
     that POE::Component::Generic requires. Specifically, noting which event
     will handle the return of the Net::OpenSSH method.
 
-    For example:
+    You can reach every method is Net::OpenSSH this way. However, some
+    methods are already delegated to make your life easier. If what you need
+    isn't delegated, you can reach it directing using the object.
+
+    For example, these two methods are equivalent:
 
         $ssh->obj->capture( { event => 'handle_capture' }, 'echo yo yo' );
+
+        $ssh->capture( { event => 'handle_capture' }, 'echo yo yo' );
+
+        # shell_quote isn't delegated
+        $ssh->obj->shell_quote(@args);
 
   object
     An alias for *obj*.
@@ -162,6 +169,24 @@ METHODS
             ],
         );
 
+  capture
+    This is a delegated method to Net::OpenSSH's capture.
+
+  capture2
+    This is a delegated method to Net::OpenSSH's *capture2*.
+
+  system
+    This is a delegated method to Net::OpenSSH's *system*.
+
+  scp_get
+    This is a delegated method to Net::OpenSSH's *scp_get*.
+
+  scp_put
+    This is a delegated method to Net::OpenSSH's *scp_put*.
+
+  sftp
+    This is a delegated method to Net::OpenSSH's *sftp*.
+
 AUTHOR
     Sawyer X, "<xsawyerx at cpan.org>"
 
@@ -170,7 +195,8 @@ BUGS
     to figure out and resolve. Using MooseX::POE, running "capture"s from
     the "START" event works, but running from another event doesn't. The
     connection fails and hangs. In order to fix it, I use a clearance on the
-    attribute before running the second "capture".
+    attribute before running the second "capture", so now it works, but I've
+    yet to understand why that happens.
 
     Please report any bugs or feature requests to "bug-poe-component-openssh
     at rt.cpan.org", or through the web interface at

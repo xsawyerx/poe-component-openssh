@@ -11,6 +11,7 @@ WriteMakefile
                            'Net::OpenSSH' => '0.36',
                            'POE' => '1.006',
                            'POE::Component::Generic' => '0.1201',
+                           'POE::Test::Helpers' => '0.06',
                            'Term::ReadKey' => '0',
                            'Term::ReadPassword' => '0',
                            'Test::More' => '0'
