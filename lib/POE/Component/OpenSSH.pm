@@ -63,7 +63,7 @@ Need nonblocking SSH? You like Net::OpenSSH? Try out this stuff right here.
     use POE::Component::OpenSSH;
 
     my $ssh = POE::Component::OpenSSH->new( args => [ $host, user => $user ] );
-    $ssh->obj->system( { event => 'read_system_output' }, 'w' );
+    $ssh->system( { event => 'read_system_output' }, 'w' );
 
 Perhaps you want it with debugging and verbose of POE::Component::Generic
 
@@ -83,6 +83,8 @@ What about setting timeout for Net::OpenSSH?
 
 This module allows you to use SSH (via L<Net::OpenSSH>) in a nonblocking manner.
 
+The only differences is that in the I<new()> method, you need to indicate OpenSSH args in I<args>, and the first arg to a method should be a hashref that includes an I<event> to reach with the result.
+
 I kept having to write this small thing each time I needed nonblocking SSH in a project. I got tired of it so I wrote this instead.
 
 You might ask 'why put the args in an "args" attribute instead of straight away attributes?' Because Net::OpenSSH has a lot of options and they may collide with POE::Component::Generic's options and I don't feel like maintaining the mess.
@@ -94,12 +96,11 @@ Here is a more elaborate example using L<MooseX::POE>:
 (If you know L<POE::Session>, you can use that too)
 
     package Runner;
-
     use MooseX::POE;
 
     has 'host' => ( is => 'ro', isa => 'Str', default => 'localhost' );
     has 'user' => ( is => 'ro', isa => 'Str', default => 'root'      );
-    has 'pass' => ( is => 'ro', isa => 'Str', default => 'psss'      );
+    has 'pass' => ( is => 'ro', isa => 'Str', default => 'pass'      );
     has 'cmd'  => ( is => 'ro', isa => 'Str', default => 'w'         );
 
     sub START {
@@ -112,12 +113,7 @@ Here is a more elaborate example using L<MooseX::POE>:
             ],
         );
 
-        # remember, $ssh is just POE::Component::OpenSSH
-        # you want the Net::OpenSSH object (or psuedo-object)
-        $ssh->obj->capture( { event => 'parse_cmd' }, $cmd );
-
-        # this is the same:
-        $ssh->object->capture( { event => 'parse_cmd' }, $cmd );
+        $ssh->capture( { event => 'parse_cmd' }, $cmd );
     }
 
     event 'parse_cmd' => sub {
@@ -148,7 +144,7 @@ Here is a more elaborate example using L<MooseX::POE>:
 
 Creates a new POE::Component::OpenSSH object. If you want to access the Net::OpenSSH check I<obj> below.
 
-You should note this object is simply a component, you're still required to put it in a L<POE::Session>. The examples use L<MooseX::POE> which does the same thing.
+This module (still?) doesn't have a I<spawn> method, so you're still required to put it in a L<POE::Session>. The examples use L<MooseX::POE> which does the same thing.
 
 =over 4
 
@@ -182,9 +178,16 @@ Some stuff about what is happening to L<Net::OpenSSH>. Very useful for debugging
 
 This method access the actual Net::OpenSSH object. It is wrapped with L<POE::Component::Generic>, so the first argument is actually a hashref that POE::Component::Generic requires. Specifically, noting which event will handle the return of the Net::OpenSSH method.
 
-For example:
+You can reach B<every> method is L<Net::OpenSSH> this way. However, some methods are already delegated to make your life easier. If what you need isn't delegated, you can reach it directing using the object.
+
+For example, these two methods are equivalent:
 
     $ssh->obj->capture( { event => 'handle_capture' }, 'echo yo yo' );
+
+    $ssh->capture( { event => 'handle_capture' }, 'echo yo yo' );
+
+    # shell_quote isn't delegated
+    $ssh->obj->shell_quote(@args);
 
 =head2 object
 
@@ -211,13 +214,37 @@ For example:
         ],
     );
 
+=head2 capture
+
+This is a delegated method to L<Net::OpenSSH>'s capture.
+
+=head2 capture2
+
+This is a delegated method to L<Net::OpenSSH>'s I<capture2>.
+
+=head2 system
+
+This is a delegated method to L<Net::OpenSSH>'s I<system>.
+
+=head2 scp_get
+
+This is a delegated method to L<Net::OpenSSH>'s I<scp_get>.
+
+=head2 scp_put
+
+This is a delegated method to L<Net::OpenSSH>'s I<scp_put>.
+
+=head2 sftp
+
+This is a delegated method to L<Net::OpenSSH>'s I<sftp>.
+
 =head1 AUTHOR
 
 Sawyer X, C<< <xsawyerx at cpan.org> >>
 
 =head1 BUGS
 
-There is one known issue I've personally stumbled across which I've yet to figure out and resolve. Using L<MooseX::POE>, running C<capture>s from the C<START> event works, but running from another event doesn't. The connection fails and hangs. In order to fix it, I use a clearance on the attribute before running the second C<capture>.
+There is one known issue I've personally stumbled across which I've yet to figure out and resolve. Using L<MooseX::POE>, running C<capture>s from the C<START> event works, but running from another event doesn't. The connection fails and hangs. In order to fix it, I use a clearance on the attribute before running the second C<capture>, so now it works, but I've yet to understand why that happens.
 
 Please report any bugs or feature requests to C<bug-poe-component-openssh at rt.cpan.org>, or through
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=POE-Component-OpenSSH>.  I will be notified, and then you'll

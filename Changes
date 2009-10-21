@@ -1,8 +1,10 @@
 Revision history for POE-Component-OpenSSH
 (in the form of DD/MM/YY)
 
-0.06
+0.06    21.09.09
         * no Moose, make_immutable
+        * Currying: capture, capture2, system, scp_get, scp_put, and sftp
+        * Updating documentation to reflect this
 
 0.05    10.09.09
         * Require MooseX::Aliases 0.03 to include important fixes
