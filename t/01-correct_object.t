@@ -5,7 +5,7 @@ package test;
 use Test::More;
 use MooseX::POE;
 use POE::Component::OpenSSH;
-with 'POE::Test::Helpers';
+with 'POE::Test::Helpers::MooseRole';
 
 has 'ssh' => (
     is         => 'ro',
@@ -13,18 +13,19 @@ has 'ssh' => (
     lazy_build => 1,
 );
 
-has 'args'    => ( is => 'ro', isa => 'ArrayRef' );
+has 'args' => (
+    is => 'ro',
+    isa => 'ArrayRef',
+);
 
-has '+seq_ordering' => ( default => sub { {
-    START       => 1,
-    _build_ssh  => { 1 => ['START'] },
-    hello       => { 1 => [ '_build_ssh', 'START' ] },
-    check_event => [ '_build_ssh', 'START' ],
-} } );
-
-has '+event_params' => ( default => sub { {
-    check_event => [ [] ],
-} } );
+has '+tests' => (
+    default => sub { {
+        START       => { count  => 1                                     },
+        _build_ssh  => { count  => 1,  deps => [               'START']  },
+        hello       => { count  => 1,  deps => [ '_build_ssh', 'START' ] },
+        check_event => { params => [], deps => [ '_build_ssh', 'START' ] },
+    } },
+);
 
 sub _build_ssh {
     my $self = $_[OBJECT];
