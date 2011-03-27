@@ -7,7 +7,6 @@ our $VERSION = '0.06';
 
 use Moose;
 use Net::OpenSSH;
-use MooseX::Aliases;
 use POE::Component::Generic;
 
 has 'args'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
@@ -17,19 +16,18 @@ has 'alias'   => ( is => 'ro', isa => 'Str',      default => q{}        );
 has 'debug'   => ( is => 'ro', isa => 'Bool',     default => 0          );
 has 'verbose' => ( is => 'ro', isa => 'Bool',     default => 0          );
 
-has 'obj' => (
+has 'object' => (
     is         => 'rw',
     isa        => 'POE::Component::Generic',
-    alias      => 'object',
     handles    => [ qw( capture capture2 system scp_get scp_put sftp ) ],
     lazy_build => 1,
 );
 
-sub _build_obj {
+sub _build_object {
     my $self = shift;
 
     my @optional = ( qw( alias debug verbose options ) );
-    my $obj  = POE::Component::Generic->spawn(
+    my $object   = POE::Component::Generic->spawn(
         alias          => $self->alias,
         package        => 'Net::OpenSSH',
         object_options => $self->args,
@@ -38,7 +36,7 @@ sub _build_obj {
         error          => $self->error,
     );
 
-    return $obj;
+    return $object;
 }
 
 no Moose;
@@ -142,7 +140,7 @@ Here is a more elaborate example using L<MooseX::POE>:
 
 =head2 new
 
-Creates a new POE::Component::OpenSSH object. If you want to access the Net::OpenSSH check I<obj> below.
+Creates a new POE::Component::OpenSSH object. If you want to access the Net::OpenSSH check I<object> below.
 
 This module (still?) doesn't have a I<spawn> method, so you're still required to put it in a L<POE::Session>. The examples use L<MooseX::POE> which does the same thing.
 
@@ -182,16 +180,12 @@ You can reach B<every> method is L<Net::OpenSSH> this way. However, some methods
 
 For example, these two methods are equivalent:
 
-    $ssh->obj->capture( { event => 'handle_capture' }, 'echo yo yo' );
+    $ssh->object->capture( { event => 'handle_capture' }, 'echo yo yo' );
 
     $ssh->capture( { event => 'handle_capture' }, 'echo yo yo' );
 
     # shell_quote isn't delegated
-    $ssh->obj->shell_quote(@args);
-
-=head2 object
-
-An alias for I<obj>.
+    $ssh->object->shell_quote(@args);
 
 =head2 args
 

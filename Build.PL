@@ -17,7 +17,6 @@ my $builder = Module::Build->new(
         'POE'                     => 1.006,
         'Moose'                   => 0.86,
         'Net::OpenSSH'            => 0.36,
-        'MooseX::Aliases'         => 0.03,
         'POE::Test::Helpers'      => 0.06,
         'POE::Component::Generic' => 0.1201,
     },
