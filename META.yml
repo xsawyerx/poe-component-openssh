@@ -25,7 +25,7 @@ name: POE-Component-OpenSSH
 provides:
   POE::Component::OpenSSH:
     file: lib/POE/Component/OpenSSH.pm
-    version: 0.07
+    version: 0.08
 requires:
   Moose: 0.86
   Net::OpenSSH: 0.36
@@ -35,4 +35,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://github.com/xsawyerx/poe-component-openssh/tree/master
-version: 0.07
+version: 0.08

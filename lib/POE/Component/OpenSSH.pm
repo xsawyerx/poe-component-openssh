@@ -3,7 +3,7 @@ package POE::Component::OpenSSH;
 use strict;
 use warnings;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 use Moose;
 use Net::OpenSSH;
@@ -52,7 +52,7 @@ POE::Component::OpenSSH - Nonblocking SSH Component for POE using Net::OpenSSH
 
 =head1 VERSION
 
-Version 0.07
+Version 0.08
 
 =head1 SYNOPSIS
 
