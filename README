@@ -98,7 +98,7 @@ DESCRIPTION
 METHODS
   new
     Creates a new POE::Component::OpenSSH object. If you want to access the
-    Net::OpenSSH check *obj* below.
+    Net::OpenSSH check *object* below.
 
     This module (still?) doesn't have a *spawn* method, so you're still
     required to put it in a POE::Session. The examples use MooseX::POE which
@@ -138,15 +138,12 @@ METHODS
 
     For example, these two methods are equivalent:
 
-        $ssh->obj->capture( { event => 'handle_capture' }, 'echo yo yo' );
+        $ssh->object->capture( { event => 'handle_capture' }, 'echo yo yo' );
 
         $ssh->capture( { event => 'handle_capture' }, 'echo yo yo' );
 
         # shell_quote isn't delegated
-        $ssh->obj->shell_quote(@args);
-
-  object
-    An alias for *obj*.
+        $ssh->object->shell_quote(@args);
 
   args
     These are the arguments that will go to Net::OpenSSH creation. This is

@@ -11,3 +11,4 @@ t/01-correct_object.t
 t/boilerplate.t
 t/pod-coverage.t
 t/pod.t
+META.json
