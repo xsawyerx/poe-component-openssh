@@ -8,6 +8,7 @@ my $builder = Module::Build->new(
     dist_author         => 'Sawyer X <xsawyerx@cpan.org>',
     dist_version_from   => 'lib/POE/Component/OpenSSH.pm',
     build_requires => {
+        'Module::Build'      => 0.2808,
         'Test::More'         => 0,
         'MooseX::POE'        => 0,
         'Term::ReadKey'      => 0,
