@@ -1,38 +1,30 @@
----
-abstract: 'Nonblocking SSH Component for POE using Net::OpenSSH'
-author:
-  - 'Sawyer X <xsawyerx@cpan.org>'
-build_requires:
-  MooseX::POE: 0
-  Term::ReadKey: 0
-  Term::ReadPassword: 0
-  Test::More: 0
+--- #YAML:1.0
+name:               POE-Component-OpenSSH
+version:            0.09
+abstract:           ~
+author:  []
+license:            unknown
+distribution_type:  module
 configure_requires:
-  Module::Build: 0.2808
-dynamic_config: 1
-generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.110580'
-keywords:
-  - poe
-  - ssh
-  - openssh
-  - component
-  - poco
-license: perl
-meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
-name: POE-Component-OpenSSH
-provides:
-  POE::Component::OpenSSH:
-    file: lib/POE/Component/OpenSSH.pm
-    version: 0.08
+    ExtUtils::MakeMaker:  0
+build_requires:
+    ExtUtils::MakeMaker:  0
 requires:
-  Moose: 0.86
-  Net::OpenSSH: 0.36
-  POE: 1.006
-  POE::Component::Generic: 0.1201
-  POE::Test::Helpers: 1.07
-resources:
-  license: http://dev.perl.org/licenses/
-  repository: http://github.com/xsawyerx/poe-component-openssh/tree/master
-version: 0.08
+    Module::Build:        0.2808
+    Moose:                0.86
+    MooseX::POE:          0
+    Net::OpenSSH:         0.36
+    POE:                  1.006
+    POE::Component::Generic:  0.1201
+    POE::Test::Helpers:   1.07
+    Term::ReadKey:        0
+    Term::ReadPassword:   0
+    Test::More:           0
+no_index:
+    directory:
+        - t
+        - inc
+generated_by:       ExtUtils::MakeMaker version 6.55_02
+meta-spec:
+    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
+    version:  1.4
