@@ -1,6 +1,10 @@
 Revision history for POE-Component-OpenSSH
 (in the form of DD/MM/YY)
 
+0.09
+        * No functional changes.
+        * Require earlier version of Module::Build (wu-lee).
+
 0.08    27.03.11
         * No functional changes, updating changes.
 
