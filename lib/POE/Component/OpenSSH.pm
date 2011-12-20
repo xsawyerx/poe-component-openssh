@@ -90,13 +90,18 @@ What about setting timeout for Net::OpenSSH?
 
 This module allows you to use SSH (via L<Net::OpenSSH>) in a nonblocking manner.
 
-The only differences is that in the I<new()> method, you need to indicate OpenSSH args in I<args>, and the first arg to a method should be a hashref that includes an I<event> to reach with the result.
+The only differences is that in the I<new()> method, you need to indicate
+OpenSSH args in I<args>, and the first arg to a method should be a hashref that
+includes an I<event> to reach with the result.
 
-I kept having to write this small thing each time I needed nonblocking SSH in a project. I got tired of it so I wrote this instead.
+I kept having to write this small thing each time I needed nonblocking SSH in a
+project. I got tired of it so I wrote this instead.
 
-You might ask 'why put the args in an "args" attribute instead of straight away attributes?' Because Net::OpenSSH has a lot of options and they may collide with POE::Component::Generic's options and I don't feel like maintaining the mess.
-
-It's on Github so you can patch it up if you want (I accept patches... and foodstamps).
+You might ask 'why put the args in an "args" attribute instead of straight away
+attributes?' Because Net::OpenSSH has a lot of options and they may collide
+with POE::Component::Generic's options and I don't feel like maintaining the
+mess. It's on Github so you can patch it up if you want (I accept patches...
+and foodstamps).
 
 Here is a more elaborate example using L<MooseX::POE>:
 
@@ -149,9 +154,12 @@ Here is a more elaborate example using L<MooseX::POE>:
 
 =head2 new
 
-Creates a new POE::Component::OpenSSH object. If you want to access the Net::OpenSSH check I<object> below.
+Creates a new POE::Component::OpenSSH object. If you want to access the
+Net::OpenSSH check I<object> below.
 
-This module (still?) doesn't have a I<spawn> method, so you're still required to put it in a L<POE::Session>. The examples use L<MooseX::POE> which does the same thing.
+This module (still?) doesn't have a I<spawn> method, so you're still required
+to put it in a L<POE::Session>. The examples use L<MooseX::POE> which does the
+same thing.
 
 =over 4
 
@@ -161,11 +169,13 @@ The arguments that will go to L<Net::OpenSSH>.
 
 =item options
 
-The options that will go to L<POE::Component::Generic>'s I<options> argument, stuff like C< { trace => 1 } >.
+The options that will go to L<POE::Component::Generic>'s I<options> argument,
+stuff like C< { trace => 1 } >.
 
 =item error
 
-Event when L<POE::Component::Generic> has an error. Either a hashref with I<session> and I<event> or a string with the event in the current session.
+Event when L<POE::Component::Generic> has an error. Either a hashref with
+I<session> and I<event> or a string with the event in the current session.
 
 =item alias
 
@@ -177,15 +187,21 @@ Shows component debugging information.
 
 =item verbose
 
-Some stuff about what is happening to L<Net::OpenSSH>. Very useful for debugging the L<Net::OpenSSH> object.
+Some stuff about what is happening to L<Net::OpenSSH>. Very useful for
+debugging the L<Net::OpenSSH> object.
 
 =back
 
 =head2 obj
 
-This method access the actual Net::OpenSSH object. It is wrapped with L<POE::Component::Generic>, so the first argument is actually a hashref that POE::Component::Generic requires. Specifically, noting which event will handle the return of the Net::OpenSSH method.
+This method access the actual Net::OpenSSH object. It is wrapped with
+L<POE::Component::Generic>, so the first argument is actually a hashref that
+POE::Component::Generic requires. Specifically, noting which event will handle
+the return of the Net::OpenSSH method.
 
-You can reach B<every> method is L<Net::OpenSSH> this way. However, some methods are already delegated to make your life easier. If what you need isn't delegated, you can reach it directing using the object.
+You can reach B<every> method is L<Net::OpenSSH> this way. However, some
+methods are already delegated to make your life easier. If what you need isn't
+delegated, you can reach it directing using the object.
 
 For example, these two methods are equivalent:
 
@@ -198,7 +214,8 @@ For example, these two methods are equivalent:
 
 =head2 args
 
-These are the arguments that will go to L<Net::OpenSSH> creation. This is an arrayref.
+These are the arguments that will go to L<Net::OpenSSH> creation. This is an
+arrayref.
 
 For example:
 
@@ -247,13 +264,15 @@ Sawyer X, C<< <xsawyerx at cpan.org> >>
 
 =head1 BUGS
 
-There is one known issue I've personally stumbled across which I've yet to figure out and resolve. Using L<MooseX::POE>, running C<capture>s from the C<START> event works, but running from another event doesn't. The connection fails and hangs. In order to fix it, I use a clearance on the attribute before running the second C<capture>, so now it works, but I've yet to understand why that happens.
+There is one known issue I've personally stumbled across which I've yet to
+figure out and resolve. Using L<MooseX::POE>, running C<capture>s from the
+C<START> event works, but running from another event doesn't. The connection
+fails and hangs. In order to fix it, I use a clearance on the attribute before
+running the second C<capture>, so now it works, but I've yet to understand why
+that happens.
 
-Please report any bugs or feature requests to C<bug-poe-component-openssh at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=POE-Component-OpenSSH>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-Also available is the Github's issue tracker at L<http://github.com/xsawyerx/poe-component-openssh/issues>.
+The Github's issue tracker is available at
+L<http://github.com/xsawyerx/poe-component-openssh/issues>.
 
 =head1 SUPPORT
 
@@ -265,10 +284,6 @@ You can also look for information at:
 
 =over 4
 
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=POE-Component-OpenSSH>
-
 =item * Github issue tracker
 
 L<http://github.com/xsawyerx/poe-component-openssh/issues>
@@ -277,23 +292,12 @@ L<http://github.com/xsawyerx/poe-component-openssh/issues>
 
 L<http://github.com/xsawyerx/poe-component-openssh/tree/master>
 
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/POE-Component-OpenSSH>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/POE-Component-OpenSSH>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/POE-Component-OpenSSH/>
-
 =back
 
 =head1 SEE ALSO
 
-If you have no idea what I'm doing (but you generally know what POE is), check these stuff:
+If you have no idea what I'm doing (but you generally know what POE is), check
+these stuff:
 
 L<POE::Component::Generic>
 
