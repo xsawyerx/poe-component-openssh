@@ -1,9 +1,7 @@
-package POE::Component::OpenSSH;
-
 use strict;
 use warnings;
-
-our $VERSION = '0.09';
+package POE::Component::OpenSSH;
+# ABSTRACT: Nonblocking SSH Component for POE using Net::OpenSSH
 
 use Moose;
 use Net::OpenSSH;
@@ -45,14 +43,6 @@ __PACKAGE__->meta->make_immutable;
 1;
 
 __END__
-
-=head1 NAME
-
-POE::Component::OpenSSH - Nonblocking SSH Component for POE using Net::OpenSSH
-
-=head1 VERSION
-
-Version 0.09
 
 =head1 SYNOPSIS
 
@@ -305,14 +295,4 @@ L<Moose>
 =head1 ACKNOWLEDGEMENTS
 
 All the people involved in the aforementioned projects and the Perl community.
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2009 Sawyer X, all rights reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
 
