@@ -3,42 +3,61 @@ use warnings;
 package POE::Component::OpenSSH;
 # ABSTRACT: Nonblocking SSH Component for POE using Net::OpenSSH
 
-use Moose;
+use Carp 'croak';
 use Net::OpenSSH;
 use POE::Component::Generic;
 
-has 'args'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
-has 'options' => ( is => 'ro', isa => 'HashRef',  default => sub { {} } );
-has 'error'   => ( is => 'ro', isa => 'HashRef',  default => sub { {} } );
-has 'alias'   => ( is => 'ro', isa => 'Str',      default => q{}        );
-has 'debug'   => ( is => 'ro', isa => 'Bool',     default => 0          );
-has 'verbose' => ( is => 'ro', isa => 'Bool',     default => 0          );
-
-has 'object' => (
-    is         => 'rw',
-    isa        => 'POE::Component::Generic',
-    handles    => [ qw( capture capture2 system scp_get scp_put sftp ) ],
-    lazy_build => 1,
-);
-
 sub _build_object {
-    my $self = shift;
-
-    my @optional = ( qw( alias debug verbose options ) );
-    my $object   = POE::Component::Generic->spawn(
-        alias          => $self->alias,
+    my $self   = shift;
+    my $object = POE::Component::Generic->spawn(
+        alias          => $self->{'alias'},
         package        => 'Net::OpenSSH',
-        object_options => $self->args,
-        debug          => $self->debug,
-        verbose        => $self->verbose,
-        error          => $self->error,
+        object_options => $self->{'args'},
+        debug          => $self->{'debug'},
+        verbose        => $self->{'verbose'},
+        error          => $self->{'error'},
     );
 
-    return $object;
+    $self->{'_object'} = $object;
+
+    return 0;
 }
 
-no Moose;
-__PACKAGE__->meta->make_immutable;
+sub object   { shift->{'_object'} }
+sub capture  { shift->{'_object'}->capture(@_)  }
+sub capture2 { shift->{'_object'}->capture2(@_) }
+sub system   { shift->{'_object'}->system(@_)   }
+sub scp_get  { shift->{'_object'}->scp_get(@_)  }
+sub scp_put  { shift->{'_object'}->scp_put(@_)  }
+sub sftp     { shift->{'_object'}->sftp(@_)     }
+
+sub new {
+    my $class = shift;
+
+    if ( @_ % 2 != 0 ) {
+        croak 'Arguments must be in the form of key/value';
+    }
+
+    my %opts  = (
+        args    => [],
+        options => {},
+        error   => {},
+        alias   => '',
+        debug   => 0,
+        verbose => 0,
+        @_,
+    );
+
+    ref $opts{'args'}    eq 'ARRAY'or croak '"args" must be an arryref';
+    ref $opts{'options'} eq 'HASH' or croak '"options" must be a hashref';
+    ref $opts{'error'}   eq 'HASH' or croak '"error" must be a hashref';
+
+    my $self = bless { %opts }, $class;
+
+    $self->_build_object;
+
+    return $self;
+}
 
 1;
 
@@ -289,8 +308,6 @@ L<Net::OpenSSH>
 L<POE>
 
 L<POE::Component::Generic>
-
-L<Moose>
 
 =head1 ACKNOWLEDGEMENTS
 

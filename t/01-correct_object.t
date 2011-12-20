@@ -3,8 +3,17 @@
 package test;
 
 use Test::More;
-use MooseX::POE;
 use POE::Component::OpenSSH;
+
+BEGIN {
+    eval "use MooseX::POE";
+    $@ and plan skip_all => 'You need MooseX::POE for this test';
+
+    eval "use POE::Test::Helpers::MooseRole";
+    $@ and plan skip_all =>
+        'You need POE::Test::Helpers::MooseRole for this test';
+}
+
 with 'POE::Test::Helpers::MooseRole';
 
 has 'ssh' => (
@@ -29,7 +38,7 @@ has '+tests' => (
 
 sub _build_ssh {
     my $self = $_[OBJECT];
-    return POE::Component::OpenSSH->new( args  => $self->args );
+    return POE::Component::OpenSSH->new( args => $self->args );
 }
 
 sub START {
