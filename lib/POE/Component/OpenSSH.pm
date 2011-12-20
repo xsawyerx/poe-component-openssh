@@ -192,7 +192,7 @@ debugging the L<Net::OpenSSH> object.
 
 =back
 
-=head2 obj
+=head2 object
 
 This method access the actual Net::OpenSSH object. It is wrapped with
 L<POE::Component::Generic>, so the first argument is actually a hashref that
