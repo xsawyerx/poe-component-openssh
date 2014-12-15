@@ -1,5 +1,6 @@
 package POE::Component::OpenSSH;
 # ABSTRACT: Non-blocking SSH Component for POE using Net::OpenSSH
+
 use strict;
 use warnings;
 use Carp 'croak';
